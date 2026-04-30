@@ -7,26 +7,42 @@ import os
 
 app = FastAPI()
 
-# Clé API récupérée depuis Render (variable d'environnement)
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# API KEY (Render environment variable)
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-prompt = """Recreate this image in an ultra-realistic style. The clothing item must be displayed flat (not folded), arranged neatly in a clean flat lay. Keep the shape natural, with sleeves and structure clearly visible and properly aligned.
+prompt = """
+Recreate this image in an ultra-realistic professional product photo style.
 
-Pay extreme attention to details: preserve the exact design of the item and do not add or modify any elements under any circumstances. Do not invent, generate, or alter any features that are not present in the original image. This includes labels, tags, logos, buttons, zippers, drawstrings, pockets, stitching, or textures. The item must remain 100% identical to the original in every detail.
+The clothing item must be displayed flat (flat lay), not folded, with a clean and perfectly aligned shape. Sleeves, edges, and structure must look natural and physically correct.
 
-Carefully detect all wrinkles, creases, and fabric deformations, and completely remove them. The clothing item must appear perfectly ironed, smooth, and flat, as if professionally pressed. There must be absolutely no visible wrinkles or folds remaining.
+EXTREME CONSTRAINTS:
+- Do NOT modify, invent, or remove any design elements of the garment.
+- Preserve EXACTLY all details: logos, labels, tags, stitching, buttons, zippers, drawstrings, textures.
+- The item must remain 100% identical to the original design.
 
-To ensure this, evenly smooth and normalize the fabric texture and color across the entire garment, removing any shading inconsistencies caused by wrinkles, while keeping a natural and realistic fabric look.
+FABRIC QUALITY:
+- Remove ALL wrinkles, folds, and creases completely.
+- The garment must look perfectly ironed and smooth.
+- Maintain realistic fabric texture while removing deformation artifacts.
+- Normalize lighting and shading caused by wrinkles while preserving realism.
 
-The fabric should look realistic with accurate texture, sharp details, and true-to-life colors.
+BACKGROUND:
+- Place the item on a light-colored wooden parquet floor (light oak / pale wood).
+- The background must remain natural, clean, minimal, and realistic.
 
-The final image must be in high resolution, extremely sharp, with no blur, no pixelation, and no noise. Ensure crisp edges and fine details, like a professional studio photo.
+LIGHTING:
+- Soft natural lighting
+- Subtle realistic shadows
+- No harsh light, no overexposure
 
-Place the item on a very light-colored parquet wooden floor (light oak or pale wood), clean and minimal, similar to what a private seller could have at home. The parquet floor background will be provided separately by the user and must be used as-is, without modification.
+QUALITY:
+- Ultra high resolution
+- Extremely sharp details
+- No blur, no noise, no pixelation
+- Professional e-commerce product photography style (like Vinted / Shopify listing)
 
-Ensure the entire image is coherent and physically realistic: consistent lighting, shadows, perspective, and proportions. Use soft natural lighting with subtle shadows to create depth while keeping a clean and professional look. Avoid harsh lighting or overexposure.
-
-The final image should look like a high-quality, realistic product photo suitable for resale on platforms like Vinted: clean, trustworthy, and visually appealing."""
+The final result must look like a high-end studio product photo.
+"""
 
 @app.get("/")
 def root():
@@ -34,33 +50,25 @@ def root():
 
 @app.post("/generate")
 async def generate(image1: UploadFile = File(...), image2: UploadFile = File(...)):
-    
-    # Lire les images envoyées
+
+    # Load images
     img1 = Image.open(io.BytesIO(await image1.read()))
     img2 = Image.open(io.BytesIO(await image2.read()))
 
-    # Appel à Gemini
-    response = client.models.generate_content(
-        model="gemini-3.1-flash-image-preview",
-        contents=[prompt, img1, img2],
-    )
+    # CALL GEMINI IMAGE MODEL
+    model = genai.GenerativeModel("gemini-3.1-flash-image-preview")
 
-    # Renvoyer l'image générée
+    response = model.generate_content([prompt, img1, img2])
+
+    # Extract image result
     for part in response.parts:
-        if part.inline_data:
-            output = part.as_image()
-            img_bytes = io.BytesIO()
-            output.save(img_bytes, format="PNG")
-            img_bytes.seek(0)
+        if hasattr(part, "inline_data") and part.inline_data:
+            img = Image.open(io.BytesIO(part.inline_data.data))
 
-            return StreamingResponse(img_bytes, media_type="image/png")
+            output = io.BytesIO()
+            img.save(output, format="PNG")
+            output.seek(0)
+
+            return StreamingResponse(output, media_type="image/png")
 
     return {"error": "no image generated"}
-
-
-# 🔥 IMPORTANT POUR RENDER (PORT DYNAMIQUE)
-import uvicorn
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
