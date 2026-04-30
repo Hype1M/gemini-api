@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import StreamingResponse
 from PIL import Image
-from google import genai
+import google.generativeai as genai
 import io
 import os
 
