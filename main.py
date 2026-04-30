@@ -56,3 +56,11 @@ async def generate(image1: UploadFile = File(...), image2: UploadFile = File(...
             return StreamingResponse(img_bytes, media_type="image/png")
 
     return {"error": "no image generated"}
+
+
+# 🔥 IMPORTANT POUR RENDER (PORT DYNAMIQUE)
+import uvicorn
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
