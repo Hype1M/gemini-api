@@ -4,6 +4,7 @@ from PIL import Image
 import io
 import os
 from google import genai
+from google.genai import types
 
 app = FastAPI()
 
@@ -39,17 +40,25 @@ async def generate(image1: UploadFile = File(...)):
         # Image utilisateur
         img1 = Image.open(io.BytesIO(await image1.read()))
 
-        # Fond par défaut (à mettre dans ton repo)
+        # Fond par défaut
         img2 = Image.open("fond.png")
 
+        # 🔥 Appel Gemini avec ratio 3:4 uniquement
         response = client.models.generate_content(
             model="gemini-3.1-flash-image-preview",
             contents=[prompt, img1, img2],
+            config=types.GenerateContentConfig(
+                image_config=types.ImageConfig(
+                    aspect_ratio="3:4"
+                )
+            )
         )
 
+        # Récupération image générée
         for part in response.parts:
             if part.inline_data:
                 img = Image.open(io.BytesIO(part.inline_data.data))
+
                 output = io.BytesIO()
                 img.save(output, format="PNG")
                 output.seek(0)
