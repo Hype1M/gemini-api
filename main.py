@@ -23,7 +23,7 @@ The fabric should look realistic with accurate texture, sharp details, and true-
 
 The final image must be in high resolution, extremely sharp, with no blur, no pixelation, and no noise. Ensure crisp edges and fine details, like a professional studio photo.
 
-Place the item on a very light-colored parquet wooden floor (light oak or pale wood), clean and minimal.
+Use the provided background image as-is, without any modification. The clothing item must be naturally integrated into this background with consistent lighting, perspective, and shadows.
 
 Ensure the entire image is coherent and physically realistic: consistent lighting, shadows, perspective, and proportions. Use soft natural lighting with subtle shadows to create depth while keeping a clean and professional look. Avoid harsh lighting or overexposure.
 
