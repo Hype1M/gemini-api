@@ -15,14 +15,14 @@ prompt = """Recreate this image in an ultra-realistic style.
 — Image type detection (CRITICAL) —
 First, analyze the image to determine its type:
 
-If the image shows a CLOSE-UP / DETAIL SHOT (a label, tag, logo, care instructions, brand patch, zipper, button, or any isolated detail of the garment): keep the composition exactly as-is. Do NOT reframe, zoom out, or reposition the subject. Simply apply light wrinkle removal to smooth the fabric slightly, and replace the background with the provided background image, integrating the subject naturally with consistent lighting and shadows. Do nothing else.
-If the image shows the FULL GARMENT: apply all instructions below.
+If the image is a CLOSE-UP / DETAIL SHOT (a label, tag, logo, care instructions, brand patch, zipper, button, or any isolated detail of the garment — meaning the garment itself is NOT the main subject): keep the composition exactly as-is. Do NOT reframe, zoom out, reposition, or reconstruct the full garment. Simply apply light wrinkle removal to smooth the fabric slightly, and replace the background with the provided background image. Do nothing else.
+If the image shows the FULL GARMENT (whether folded, hanging, worn, or laid flat): apply all the instructions below.
 
 
 — Full garment instructions —
 The clothing item must be displayed flat (not folded), arranged neatly in a clean flat lay. Keep the shape natural, with sleeves and structure clearly visible and properly aligned.
 Preservation of original design (ABSOLUTE RULE):
-Pay extreme attention to details. Preserve the exact design of the item and do not add or modify any elements under any circumstances. Do not invent, generate, or alter any features that are not present in the original image. This includes labels, tags, logos, buttons, zippers, drawstrings, pockets, stitching, or textures. The item must remain 100% identical to the original in every detail.
+Preserve the exact design of the item and do not add or modify any elements under any circumstances. Do not invent, generate, or alter any features that are not present in the original image. This includes labels, tags, logos, buttons, zippers, drawstrings, pockets, stitching, or textures. The item must remain 100% identical to the original in every detail.
 Wrinkle removal:
 Carefully detect all wrinkles, creases, and fabric deformations, and completely remove them. The clothing item must appear perfectly ironed, smooth, and flat, as if professionally pressed. There must be absolutely no visible wrinkles or folds remaining. Evenly smooth and normalize the fabric texture and color across the entire garment, removing any shading inconsistencies caused by wrinkles, while keeping a natural and realistic fabric look.
 Image quality:
@@ -31,8 +31,7 @@ Background:
 Use the provided background image as-is, without any modification. The clothing item must be naturally integrated into this background with consistent lighting, perspective, and shadows.
 Global coherence:
 Ensure the entire image is coherent and physically realistic: consistent lighting, shadows, perspective, and proportions. Use soft natural lighting with subtle shadows to create depth while keeping a clean and professional look. Avoid harsh lighting or overexposure.
-The final image should look like a high-quality, realistic product photo suitable for resale on platforms like Vinted: clean, trustworthy, and visually appealing.
-"""
+The final image should look like a high-quality, realistic product photo suitable for resale on platforms like Vinted: clean, trustworthy, and visually appealing."""
 
 @app.get("/")
 def root():
