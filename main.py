@@ -15,7 +15,13 @@ prompt = """Recreate this image in an ultra-realistic style.
 — Image type detection (CRITICAL) —
 First, analyze the image to determine its type:
 
-If the image is a CLOSE-UP / DETAIL SHOT (a label, tag, logo, care instructions, brand patch, zipper, button, or any isolated detail of the garment — meaning the garment itself is NOT the main subject): keep the composition exactly as-is. Do NOT reframe, zoom out, reposition, or reconstruct the full garment. Simply apply light wrinkle removal to smooth the fabric slightly, and replace the background with the provided background image. Do nothing else.
+If the image is a CLOSE-UP / DETAIL SHOT (a label, tag, logo, care instructions, brand patch, zipper, button, or any isolated detail of the garment — meaning the garment itself is NOT the main subject):
+Keep the composition, framing, and subject exactly as-is. Do NOT reframe, zoom out, reposition, or modify the subject in any way.
+Identify the main subject of the image (label, logo, care tag, brand patch, etc.) and make it the clear focal point of the final image. Enhance its visual presence: ensure it is sharp, well-lit, and stands out naturally against the background without altering its content.
+Carefully remove any visible wrinkles or fabric deformations around or behind the detail, so the surface appears smooth and flat.
+Preserve every text, symbol, number, graphic, color, and font exactly as they appear — do not alter, enhance, reinterpret, or hallucinate any information visible on the label or logo.
+Replace the background with the provided background image, integrating the subject naturally with consistent lighting and shadows.
+The final result must look like a clean, sharp, professional close-up product photo that clearly highlights the detail being shown. Do nothing else.
 If the image shows the FULL GARMENT (whether folded, hanging, worn, or laid flat): apply all the instructions below.
 
 
