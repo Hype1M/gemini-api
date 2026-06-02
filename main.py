@@ -37,7 +37,8 @@ Background:
 Use the provided background image as-is, without any modification. The clothing item must be naturally integrated into this background with consistent lighting, perspective, and shadows.
 Global coherence:
 Ensure the entire image is coherent and physically realistic: consistent lighting, shadows, perspective, and proportions. Use soft natural lighting with subtle shadows to create depth while keeping a clean and professional look. Avoid harsh lighting or overexposure.
-The final image should look like a high-quality, realistic product photo suitable for resale on platforms like Vinted: clean, trustworthy, and visually appealing."""
+The final image should look like a high-quality, realistic product photo suitable for resale on platforms like Vinted: clean, trustworthy, and visually appealing.
+"""
 
 @app.get("/")
 def root():
