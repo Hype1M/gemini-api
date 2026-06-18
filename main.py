@@ -39,7 +39,7 @@ async def generate(image1: UploadFile = File(...)):
 
         # 🔥 Appel Gemini avec ratio 3:4 uniquement
         response = client.models.generate_content(
-            model="gemini-3.1-flash-image-preview",
+            model="gemini-3.1-flash-image",
             contents=[prompt, img1, img2],
             config=types.GenerateContentConfig(
                 image_config=types.ImageConfig(
