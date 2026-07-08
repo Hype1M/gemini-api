@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
 from PIL import Image
 import io
@@ -10,6 +10,17 @@ app = FastAPI()
 
 # Initialisation client
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+# 🔥 Les 4 fonds disponibles
+# La clé est le nom envoyé par l'application (identique au sélecteur dans l'app).
+# La valeur est le nom du fichier image à placer à côté de ce main.py sur Render.
+BACKGROUNDS = {
+    "parquet": "fond_parquet.jpg",   # Parquet
+    "solbrut": "fond_brut.jpg",      # Brut
+    "moquette": "fond_vegetal.jpg",  # Végétal
+    "tapis": "fond_tapis.png",       # Tapis
+}
+DEFAULT_BACKGROUND = "parquet"
 
 prompt = """Image type detection (CRITICAL)
 First, analyze the image to determine its type.
@@ -24,18 +35,26 @@ Background: Use the provided background image as-is, without any modification. T
 Global coherence: Ensure the entire image is coherent and physically realistic: consistent lighting, shadows, perspective, and proportions. Use soft natural lighting with subtle shadows to create depth while keeping a clean and professional look. Avoid harsh lighting or overexposure. The final image should look like a high-quality, realistic product photo suitable for resale on platforms like Vinted: clean, trustworthy, and visually appealing.
 """
 
+
 @app.get("/")
 def root():
     return {"status": "API running"}
 
+
 @app.post("/generate")
-async def generate(image1: UploadFile = File(...)):
+async def generate(
+    image1: UploadFile = File(...),
+    background: str = Form(DEFAULT_BACKGROUND),  # 🔥 nouveau paramètre optionnel ("1" à "4")
+):
     try:
         # Image utilisateur
         img1 = Image.open(io.BytesIO(await image1.read()))
 
-        # Fond par défaut
-        img2 = Image.open("fond.png")
+        # 🔥 Choix du fond.
+        # Si l'app n'envoie rien (ancienne version) ou une valeur inconnue,
+        # on retombe automatiquement sur le fond 1 -> aucune régression.
+        fond_file = BACKGROUNDS.get(background, BACKGROUNDS[DEFAULT_BACKGROUND])
+        img2 = Image.open(fond_file)
 
         # 🔥 Appel Gemini avec ratio 3:4 uniquement
         response = client.models.generate_content(
