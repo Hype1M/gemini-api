@@ -8,6 +8,15 @@ from google.genai import types
 
 app = FastAPI()
 
+# 🔓 CORS — autorise les appels depuis le site (navigateur)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],       # tu peux restreindre plus tard à ton domaine
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Initialisation client
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
